@@ -1,7 +1,7 @@
 from flask import *
-import requests, json
 from utilities.kafka.producer_test import send_messages
-
+from flask import  jsonify, request
+from utilities.kafka.producer_test import send_messages
 app = Flask(__name__)
 
 
@@ -9,17 +9,25 @@ app = Flask(__name__)
 def hello_world():
     return render_template('index.html')
 
-
-@app.route("/pushtotopic")
+@app.route("/pushtotopic", methods=['GET'])
 def push_to_topic():
-    data = "Aryan"
-    #data = request.json['data']
-    send_messages(data)
-    return "succesfully pushd to the topic"
+    try:
+        data = request.json['data']
+        send_messages(data)
+        return jsonify({"status": "success", "message": "successfully pushed to the topic"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
 
+@app.route("/about")
+def about():
+    return render_template('about.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+@app.route("/shop")
+def shop():
+    return render_template('shop.html')
 
 """
 ./zookeeper-server-start.sh ../config/zookeeper.properties
