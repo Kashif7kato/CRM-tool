@@ -29,6 +29,10 @@ if __name__ == "__main__":
 def shop():
     return render_template('shop.html')
 
+@app.route("/cart")
+def cart():
+    return render_template('cart.html')
+
 """
 ./zookeeper-server-start.sh ../config/zookeeper.properties
 ./kafka_dependency-server-start.sh ../config/server.properties
